@@ -50,15 +50,28 @@ public class EmployeeService {
         return ErrorKinds.SUCCESS;
     }
     
-    
+    //従業員更新
     @Transactional
     public ErrorKinds update(Employee employee) {
+    	
+    	Employee password = findByCode(employee.getCode());
 
         // パスワードチェック
        if(employee.getPassword() =="") {
-    	  Employee passward = findByCode(employee.getCode());
-    	  employee.setPassword(passward.getPassword());
-       }
+    	   employee.setPassword(password.getPassword());
+       }else {
+    	   //パスワードの文字種チェック、文字数チェックを行う
+    	   ErrorKinds result =
+    			   employeePasswordCheck(employee);
+    	   if(ErrorKinds.CHECK_OK != result) {
+    		   return result;
+    	   }
+    	   //パスワードを暗号化して設定する
+    	   
+    	   employee.setPassword(passwordEncoder.encode(employee.getPassword()));}
+       //Created_atをDBから取得した値を再設定
+       employee.setCreatedAt(password.getCreatedAt());
+    	   
 
         
         employee.setDeleteFlg(false);

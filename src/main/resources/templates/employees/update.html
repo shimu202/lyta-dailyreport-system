@@ -20,6 +20,9 @@
                         <div class="card-body">
                             <form th:action="@{/employees/{code}/update(code=${ employee.code})}" th:object="${employee}" th:method="post">
                                 <div class="wizard wizard-success mb-4">
+                                
+                                <div class="mb-3 mb-2 bg-light border-bottom text-muted">
+                                              パスワードは変更の場合のみ入力してください</div>
                                     <div class="mb-3">
                                         <label class="form-label" for="code">社員番号</label>
                                         <p class="mb-1"></p>
@@ -57,7 +60,7 @@
                                     </div>
                                 </div>
                                 <p class="mt-5">
-                                    <input type="submit" value="登録" class="btn btn-primary">
+                                    <input type="submit" value="更新" class="btn btn-primary">
                                     <a th:href="@{/employees}" class="btn btn-primary">戻る</a>
                                 </p>
                             </form>
