@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.techacademy.constants.ErrorKinds;
 import com.techacademy.constants.ErrorMessage;
 import com.techacademy.entity.Employee;
+import com.techacademy.entity.Report;
 import com.techacademy.service.EmployeeService;
 import com.techacademy.service.UserDetail;
 
@@ -108,7 +111,7 @@ public class EmployeeController {
             model.addAttribute("employee", employeeService.findByCode(code));
             return detail(code, model);
         }
-
+     
         return "redirect:/employees";
     }
     //従業員更新画面を表示
@@ -123,6 +126,7 @@ public class EmployeeController {
     	}
     	return "employees/update";
     }
+    
     @PostMapping(value = "/{code}/update")
     public String update(@PathVariable String code, @Validated Employee employee, BindingResult res, Model model) {
     	

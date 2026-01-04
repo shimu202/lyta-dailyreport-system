@@ -47,6 +47,10 @@ public class Employee {
     @NotEmpty
     @Length(max = 20)
     private String name;
+    
+    public String getName() {
+    	return name;
+    }
 
     // 権限
     @Column(columnDefinition="VARCHAR(10)", nullable = false)
