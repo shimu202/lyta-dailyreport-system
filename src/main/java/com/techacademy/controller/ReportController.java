@@ -1,5 +1,7 @@
 package com.techacademy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,10 +35,18 @@ public class ReportController {
 
     // 日報一覧画面
     @GetMapping
-    public String list(Model model) {
+    public String list(@AuthenticationPrincipal UserDetail userDetail, Model model) {
 
-        model.addAttribute("listSize", reportService.findAll().size());
-        model.addAttribute("reportList", reportService.findAll());
+    	Employee employee =userDetail.getEmployee();
+    	List<Report> reportList;
+    	
+    	if(employee.getRole().toString().equals("ADMIN")) {
+    		reportList = reportService.findAll();
+    	}else {
+    		reportList =reportService.findByEmployee(userDetail.getEmployee());
+    	}
+        model.addAttribute("listSize", reportList.size());
+        model.addAttribute("reportList", reportList);
 
         return "reports/list";
     }

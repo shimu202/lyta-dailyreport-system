@@ -37,7 +37,7 @@ public class ReportService {
         Report report = option.orElse(null);
         return report;
     }
-   
+   //ログインしてる従業員
     public Employee getLoginEmployee() {
         UserDetail user =(UserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -51,7 +51,6 @@ public class ReportService {
     	Employee employee = getLoginEmployee();
  
      
-        
     	 if (reportRepository.existsByEmployeeCodeAndReportDate(
     	            employee.getCode(), report.getReportDate())) {
     	        return ErrorKinds.DATECHECK_ERROR;

@@ -2,6 +2,7 @@
 package com.techacademy.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
@@ -11,6 +12,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -64,6 +66,11 @@ public class Employee {
     // 削除フラグ(論理削除を行うため)
     @Column(columnDefinition="TINYINT", nullable = false)
     private boolean deleteFlg;
+    
+    //日報情報
+    @OneToMany(mappedBy = "employee")
+    private List<Report> reportList;
+    
 
     // 登録日時
     @Column(nullable = false)
@@ -72,5 +79,7 @@ public class Employee {
     // 更新日時
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+    
+   
 
 }
