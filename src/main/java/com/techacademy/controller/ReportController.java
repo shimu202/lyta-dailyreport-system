@@ -122,6 +122,32 @@ public class ReportController {
     	return "reports/update";
     }
     
+    //更新処理
+    
+    @PostMapping(value = "/{id}/update")
+    public String update(@PathVariable int id, @Validated Report report, BindingResult res, Model model) {
+    	
+    	if (res.hasErrors()) {
+             return edit(id, model);
+         }
+    	
+    	 try {
+             ErrorKinds result = reportService.update(id, report);
+
+             if (ErrorMessage.contains(result)) {
+                 model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
+                 return edit(id,model);
+             }
+
+         } catch (DataIntegrityViolationException e) {
+             model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
+                     ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
+             return edit(id,model);
+         }
+    	//一覧画面にリダイレクト
+    	return "redirect:/reports";
+}
+    
     
     // 従業員削除処理
     @PostMapping(value = "/{id}/delete")

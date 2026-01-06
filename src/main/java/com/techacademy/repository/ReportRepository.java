@@ -11,5 +11,6 @@ import com.techacademy.entity.Report;
 public interface ReportRepository extends JpaRepository<Report, Integer>  {
 	boolean existsByEmployeeCodeAndReportDate(String employeeCode, LocalDate reportDate);
 	List<Report> findByEmployeeAndDeleteFlgFalse(Employee employee);
+	List<Report> findByEmployeeCodeAndReportDate(String employeeCode, LocalDate reportDate);
 	}
 

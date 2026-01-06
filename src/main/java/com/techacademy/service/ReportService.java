@@ -69,6 +69,36 @@ public class ReportService {
          return ErrorKinds.SUCCESS;
      }
     
+    //更新
+    @Transactional
+    public ErrorKinds update(int id, Report report) {
+    	
+    	 Report updateReport = reportRepository.findById(id).get();
+       
+       if(updateReport ==null) {
+    	   return ErrorKinds.LOGINCHECK_ERROR;
+       }
+
+      if(!report.getReportDate().equals(updateReport.getReportDate())) {
+    	  List<Report> report2 = reportRepository.findByEmployeeCodeAndReportDate(
+    	            updateReport.getEmployee().getCode(), report.getReportDate());
+    	  if (report2.size() > 0) {
+  	        return ErrorKinds.DATECHECK_ERROR;
+  	    } 
+      }
+
+      report.setCreatedAt(updateReport.getCreatedAt());
+      report.setEmployee(updateReport.getEmployee());
+      report.setEmployeeCode(updateReport.getEmployeeCode());
+        LocalDateTime now = LocalDateTime.now();
+        
+        report.setUpdatedAt(now);
+
+        reportRepository.save(report);
+        return ErrorKinds.SUCCESS;
+    }
+    
+    
     // 従業員削除
     @Transactional
     public ErrorKinds delete(Integer id, UserDetail userDetail) {
