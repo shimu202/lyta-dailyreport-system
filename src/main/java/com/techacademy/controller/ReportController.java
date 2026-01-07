@@ -113,36 +113,41 @@ public class ReportController {
     
     //日報更新画面を表示
     @GetMapping(value = "/{id}/update")
-    public String edit(@PathVariable("id") int id, Model model) {
-    	
-    	 Report  report= reportService.findByCode(id);
+    public String edit(@PathVariable("id") Integer id, Report paramReport,Model model) {
 
-    		model.addAttribute("report", report );
-    	
-    	return "reports/update";
+        if (id != null) {
+            Report report = reportService.findByCode(id);
+            model.addAttribute("report", report);
+        } else {
+            model.addAttribute("report", paramReport);
+
+        }
+        return "reports/update";
     }
-    
+
     //更新処理
-    
+
     @PostMapping(value = "/{id}/update")
     public String update(@PathVariable int id, @Validated Report report, BindingResult res, Model model) {
-    	
-    	if (res.hasErrors()) {
-             return edit(id, model);
+
+        if (res.hasErrors()) {
+            Report orgReport = reportService.findByCode(id);
+            report.setEmployee(orgReport.getEmployee());
+             return edit(null, report, model);
          }
-    	
+
     	 try {
              ErrorKinds result = reportService.update(id, report);
 
              if (ErrorMessage.contains(result)) {
                  model.addAttribute(ErrorMessage.getErrorName(result), ErrorMessage.getErrorValue(result));
-                 return edit(id,model);
+                 return edit(null, report,model);
              }
 
          } catch (DataIntegrityViolationException e) {
              model.addAttribute(ErrorMessage.getErrorName(ErrorKinds.DUPLICATE_EXCEPTION_ERROR),
                      ErrorMessage.getErrorValue(ErrorKinds.DUPLICATE_EXCEPTION_ERROR));
-             return edit(id,model);
+             return edit(null, report,model);
          }
     	//一覧画面にリダイレクト
     	return "redirect:/reports";
